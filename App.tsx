@@ -13,7 +13,7 @@ import {
 export default function App() {
     //TODO: Planning to develop propotype for idle timer in react native
 
-    const [isIdle, setIsIdle] = useState(false);
+    // const [isIdle, setIsIdle] = useState(false);
     const startTime = useRef<number>(Date.now());
     const lastReset = useRef<number>(Date.now());
     const lastIdle = useRef<number>(null);
@@ -23,7 +23,7 @@ export default function App() {
     const promptTime = useRef<number>(0);
     const remaining = useRef<number>(0);
 
-    const [startTimer, setStartTimer] = useState<number>();
+    // const [startTimer, setStartTimer] = useState<number>();
     const [countdownTime, setCountdownTime] = useState<number>();
 
     // State References
@@ -72,9 +72,6 @@ export default function App() {
         remaining.current = 0;
         promptTime.current = 0;
 
-        setIsIdle(false);
-        setStartTimer(undefined);
-
         createTimeout();
     };
 
@@ -89,8 +86,7 @@ export default function App() {
     };
 
     const toggleIdleState = () => {
-        setIsIdle((prev) => !prev);
-        setStartTimer(Date.now());
+        idle.current = !idle.current;
     };
 
     const destroyTimeout = () => {
@@ -130,20 +126,18 @@ export default function App() {
     useEffect(() => {
         let interval: NodeJS.Timeout;
 
-        if (startTimer) {
-            interval = setInterval(() => {
-                setCountdownTime(getSecondsFromDateCurrent(startTimer));
-            }, 1000);
-        }
+        interval = setInterval(() => {
+            setCountdownTime(getSecondsFromDateCurrent(startTime.current));
+        }, 1000);
 
         return () => {
             clearInterval(interval);
         };
-    }, [startTimer]);
+    });
 
     return (
         <View style={styles.container} {...panResponder.panHandlers}>
-            <Text>{isIdle ? "Idle" : "Active"}</Text>
+            <Text>{idle.current ? "Idle" : "Active"}</Text>
             {countdownTime && <Text>Timer {countdownTime.toFixed()}</Text>}
             <StatusBar style="auto" />
             <Button
