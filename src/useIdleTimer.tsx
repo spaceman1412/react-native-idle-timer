@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import { Keyboard, PanResponder } from "react-native";
 
 export function useIdleTimer() {
@@ -10,6 +16,8 @@ export function useIdleTimer() {
 
     const isPause = useRef<boolean>(false);
     const pauseTime = useRef<number>(null);
+
+    const isIdle = useRef<boolean>(false);
 
     const remaningTime = useRef<number>(10); // Time countdown to trigger onIdle
 
@@ -50,13 +58,20 @@ export function useIdleTimer() {
             currentTime.current + remaningTime.current * 1000 - Date.now();
     };
 
+    const handleIdle = () => {
+        isIdle.current = true;
+
+        // Trigger action
+        onIdle();
+    };
+
     const resume = () => {
         isPause.current = false;
         pauseTime.current = null;
 
         if (!tid.current) {
             tid.current = setTimeout(() => {
-                onIdle();
+                handleIdle();
             }, remaningTime.current * 1000);
         }
     };
@@ -75,18 +90,22 @@ export function useIdleTimer() {
     useEffect(() => {
         // On mount
         console.log("mounting");
+        tid.current = setTimeout(() => {
+            handleIdle();
+        }, remaningTime.current * 1000);
     }, []);
 
     const reset = () => {
         currentTime.current = Date.now();
         lastReset.current = Date.now();
+        // isIdle.current = false;
 
         if (tid.current) {
             clearTimeout(tid.current);
         }
 
         tid.current = setTimeout(() => {
-            onIdle();
+            handleIdle();
         }, remaningTime.current * 1000);
     };
 
@@ -111,13 +130,27 @@ export function useIdleTimer() {
         };
     }, []);
 
+    const getIsIdle = useCallback(() => {
+        console.log("getIsIdle", isIdle.current);
+        return isIdle.current;
+    }, [isIdle.current]);
+
+    const setIsIdle = useCallback(
+        (value: boolean) => {
+            isIdle.current = value;
+        },
+        [isIdle.current]
+    );
+
     const idleTimer = {
         panResponder,
         reset,
-        startTime: currentTime.current,
+        currentTime: currentTime.current,
+        startTime: startTime.current,
         getRemainingTime,
         pause,
         resume,
+        getIsIdle,
     };
 
     return idleTimer;

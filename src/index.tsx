@@ -6,12 +6,9 @@ import { useIdleTimerContext } from "./IdleTimerContext";
 export const DemoScreen = () => {
     const [isPrompt, setIsPrompt] = useState(false);
     const [countdownTime, setCountdownTime] = useState<number>();
+    const [isIdle, setIsIdle] = useState(false);
 
     const idleTimer = useIdleTimerContext();
-
-    useEffect(() => {
-        console.log(idleTimer?.startTime);
-    }, []);
 
     const getSecondsFromDateCurrent = (date: number) => {
         // Need to make this update everytime
@@ -22,10 +19,12 @@ export const DemoScreen = () => {
     };
 
     useEffect(() => {
-        setInterval(() => {
-            console.log(idleTimer?.getRemainingTime());
-            setCountdownTime(idleTimer?.getRemainingTime() ?? 0);
+        const intervalId = setInterval(() => {
+            setCountdownTime(idleTimer.getRemainingTime() ?? 0);
+            setIsIdle(idleTimer.getIsIdle());
         }, 500);
+
+        return () => clearInterval(intervalId);
     }, [idleTimer]);
 
     return (
@@ -48,8 +47,9 @@ export const DemoScreen = () => {
                 </View>
             </Modal>
 
-            {/* <Text>{idle.current ? "Idle" : "Active"}</Text> */}
-            {countdownTime && <Text>Timer {countdownTime}</Text>}
+            <Text>Is idle: {isIdle ? "Idle" : "Active"}</Text>
+
+            <Text>Timer {countdownTime}</Text>
 
             <StatusBar />
             <Button
