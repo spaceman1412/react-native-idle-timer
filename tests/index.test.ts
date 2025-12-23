@@ -15,6 +15,10 @@ describe("useIdleTimer", () => {
         expect(result.current.startTime).toBeDefined();
         expect(result.current.currentTime).toBeDefined();
         expect(result.current.panResponder).toBeDefined();
+        expect(result.current.getRemainingTime()).toEqual(10);
+        expect(result.current.getCurrentState()).toEqual("running");
+        expect(result.current.getIsIdle()).toBe(false);
+        expect(result.current.getLastReset()).toBeNull();
     });
 
     test("reset useIdleTimer", () => {
@@ -55,7 +59,7 @@ describe("useIdleTimer", () => {
         jest.useRealTimers();
     });
 
-    test("Reset timer on action (touch/keyboard)", () => {
+    test("Reset timer", () => {
         jest.useFakeTimers();
         const { result } = setup();
 
