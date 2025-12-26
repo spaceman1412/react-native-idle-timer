@@ -18,7 +18,7 @@ export function useIdleTimer(props: UseIdleTimerProps = {}) {
 
     const isIdle = useRef<boolean>(false);
 
-    const remaningTime = useRef<number>(props.timeout ?? 10); // Time countdown to trigger onIdle
+    const remainingTime = useRef<number>(props.timeout ?? 10); // Time countdown to trigger onIdle
 
     const currentState = useRef<"running" | "paused" | "idle">("running");
 
@@ -43,10 +43,10 @@ export function useIdleTimer(props: UseIdleTimerProps = {}) {
             }
         } else {
             const timeOutTime =
-                currentTime.current + remaningTime.current * 1000;
-            const remainingTime = timeOutTime - Date.now();
-            if (remainingTime > 0) {
-                return Math.round(remainingTime / 1000);
+                currentTime.current + remainingTime.current * 1000;
+            const remainingTimeValue = timeOutTime - Date.now();
+            if (remainingTimeValue > 0) {
+                return Math.round(remainingTimeValue / 1000);
             } else {
                 return 0;
             }
@@ -61,7 +61,7 @@ export function useIdleTimer(props: UseIdleTimerProps = {}) {
 
         currentState.current = "paused";
         pauseTime.current =
-            currentTime.current + remaningTime.current * 1000 - Date.now();
+            currentTime.current + remainingTime.current * 1000 - Date.now();
     };
 
     const handleIdle = () => {
@@ -78,7 +78,7 @@ export function useIdleTimer(props: UseIdleTimerProps = {}) {
         if (!tid.current) {
             tid.current = setTimeout(() => {
                 handleIdle();
-            }, remaningTime.current * 1000);
+            }, remainingTime.current * 1000);
         }
     };
 
@@ -98,7 +98,7 @@ export function useIdleTimer(props: UseIdleTimerProps = {}) {
         console.log("mounting");
         tid.current = setTimeout(() => {
             handleIdle();
-        }, remaningTime.current * 1000);
+        }, remainingTime.current * 1000);
 
         return () => {
             if (tid.current) {
@@ -118,7 +118,7 @@ export function useIdleTimer(props: UseIdleTimerProps = {}) {
 
         tid.current = setTimeout(() => {
             handleIdle();
-        }, remaningTime.current * 1000);
+        }, remainingTime.current * 1000);
     };
 
     useEffect(() => {
