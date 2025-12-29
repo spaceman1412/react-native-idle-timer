@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import {
+    Keyboard,
+    KeyboardAvoidingView,
     Modal,
+    Platform,
     Pressable,
     ScrollView,
     StatusBar,
     StyleSheet,
     Text,
     TextInput,
+    TouchableWithoutFeedback,
     View,
 } from "react-native";
 import { useIdleTimer } from "./useIdleTimer";
@@ -41,92 +45,120 @@ export const DemoScreen = () => {
     }, [idleTimer]);
 
     return (
-        <View style={styles.container} {...idleTimer.panResponder.panHandlers}>
-            <StatusBar barStyle="light-content" />
-
-            <ScrollView
-                style={styles.scroll}
-                contentContainerStyle={styles.scrollContent}
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.container}
+            keyboardVerticalOffset={0}
+        >
+            <View
+                style={styles.innerContainer}
+                {...idleTimer.panResponder.panHandlers}
             >
-                {/* Header */}
-                <Text style={styles.logo}>⏱️</Text>
-                <Text style={styles.title}>Idle Timer</Text>
-                <Text style={styles.subtitle}>React Native Demo</Text>
+                <StatusBar barStyle="light-content" />
 
-                {/* Main Status Display */}
-                <View style={styles.statusContainer}>
-                    <Text style={styles.countdown}>{remainingTime}</Text>
-                    <Text style={styles.countdownLabel}>seconds remaining</Text>
-                    <StatusBadge state={state} />
-                </View>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <ScrollView
+                        style={styles.scroll}
+                        contentContainerStyle={styles.scrollContent}
+                        keyboardShouldPersistTaps="handled"
+                        keyboardDismissMode={
+                            Platform.OS === "ios" ? "interactive" : "on-drag"
+                        }
+                        automaticallyAdjustKeyboardInsets={true}
+                    >
+                        {/* Header */}
+                        <Text style={styles.logo}>⏱️</Text>
+                        <Text style={styles.title}>Idle Timer</Text>
+                        <Text style={styles.subtitle}>React Native Demo</Text>
 
-                {/* Control Buttons */}
-                <View style={styles.controls}>
-                    <ControlButton
-                        label="Pause"
-                        icon="⏸"
-                        onPress={idleTimer.pause}
-                        active={state === "paused"}
-                        variant="warning"
-                    />
-                    <ControlButton
-                        label="Resume"
-                        icon="▶️"
-                        onPress={idleTimer.resume}
-                        active={state === "running"}
-                        variant="success"
-                    />
-                    <ControlButton
-                        label="Reset"
-                        icon="↻"
-                        onPress={idleTimer.reset}
-                        variant="primary"
-                    />
-                </View>
+                        {/* Main Status Display */}
+                        <View style={styles.statusContainer}>
+                            <Text style={styles.countdown}>
+                                {remainingTime}
+                            </Text>
+                            <Text style={styles.countdownLabel}>
+                                seconds remaining
+                            </Text>
+                            <StatusBadge state={state} />
+                        </View>
 
-                {/* Interactive Test Area */}
-                <View style={styles.testSection}>
-                    <Text style={styles.sectionTitle}>
-                        Test Activity Detection
-                    </Text>
-                    <Text style={styles.sectionHint}>
-                        Touch or type below to reset the timer
-                    </Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Start typing..."
-                        placeholderTextColor="#666"
-                        multiline
-                    />
-                </View>
+                        {/* Control Buttons */}
+                        <View style={styles.controls}>
+                            <ControlButton
+                                label="Pause"
+                                icon="⏸"
+                                onPress={idleTimer.pause}
+                                active={state === "paused"}
+                                variant="warning"
+                            />
+                            <ControlButton
+                                label="Resume"
+                                icon="▶️"
+                                onPress={idleTimer.resume}
+                                active={state === "running"}
+                                variant="success"
+                            />
+                            <ControlButton
+                                label="Reset"
+                                icon="↻"
+                                onPress={idleTimer.reset}
+                                variant="primary"
+                            />
+                        </View>
 
-                {/* API Reference */}
-                <View style={styles.apiSection}>
-                    <Text style={styles.sectionTitle}>Available Methods</Text>
-                    <ApiMethod
-                        name="reset()"
-                        desc="Reset timer & mark active"
-                    />
-                    <ApiMethod name="pause()" desc="Pause the countdown" />
-                    <ApiMethod name="resume()" desc="Resume the countdown" />
-                    <ApiMethod
-                        name="getRemainingTime()"
-                        desc="Get seconds left"
-                    />
-                    <ApiMethod
-                        name="getIsIdle()"
-                        desc="Check if user is idle"
-                    />
-                    <ApiMethod
-                        name="getCurrentState()"
-                        desc="Get timer state"
-                    />
-                </View>
-            </ScrollView>
+                        {/* Interactive Test Area */}
+                        <View style={styles.testSection}>
+                            <Text style={styles.sectionTitle}>
+                                Test Activity Detection
+                            </Text>
+                            <Text style={styles.sectionHint}>
+                                Touch or type below to reset the timer
+                            </Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Start typing..."
+                                placeholderTextColor="#666"
+                                multiline
+                            />
+                        </View>
 
-            {/* Idle Modal */}
-            <IdleModal visible={isIdle} onDismiss={idleTimer.reset} />
-        </View>
+                        {/* API Reference */}
+                        <View style={styles.apiSection}>
+                            <Text style={styles.sectionTitle}>
+                                Available Methods
+                            </Text>
+                            <ApiMethod
+                                name="reset()"
+                                desc="Reset timer & mark active"
+                            />
+                            <ApiMethod
+                                name="pause()"
+                                desc="Pause the countdown"
+                            />
+                            <ApiMethod
+                                name="resume()"
+                                desc="Resume the countdown"
+                            />
+                            <ApiMethod
+                                name="getRemainingTime()"
+                                desc="Get seconds left"
+                            />
+                            <ApiMethod
+                                name="getIsIdle()"
+                                desc="Check if user is idle"
+                            />
+                            <ApiMethod
+                                name="getCurrentState()"
+                                desc="Get timer state"
+                            />
+                        </View>
+                    </ScrollView>
+                </TouchableWithoutFeedback>
+
+                {/* Idle Modal */}
+                <IdleModal visible={isIdle} onDismiss={idleTimer.reset} />
+            </View>
+        </KeyboardAvoidingView>
     );
 };
 
@@ -233,6 +265,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#0f172a",
+    },
+    innerContainer: {
+        flex: 1,
     },
     scroll: {
         flex: 1,
