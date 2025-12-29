@@ -2,6 +2,11 @@
 
 A React Native library for detecting user idle time with automatic pause/resume support for keyboard and app state changes.
 
+## Demo
+
+https://github.com/user-attachments/assets/3345ec77-d977-4cea-952c-2c0413e9579a
+
+
 ## Features
 
 - ⏱️ **Configurable timeout** - Set custom idle timeout duration
