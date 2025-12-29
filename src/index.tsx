@@ -32,15 +32,24 @@ export const DemoScreen = () => {
         },
     });
 
-    const isIdle = idleTimer.getIsIdle();
-    const state = idleTimer.getCurrentState();
+    const [isIdle, setIsIdle] = useState(() => idleTimer.getIsIdle());
+    const [state, setState] = useState<"running" | "paused" | "idle">(() =>
+        idleTimer.getCurrentState()
+    );
 
-    // Update countdown every second
+    // Update countdown, state, and isIdle every second
     useEffect(() => {
+        // Initialize values immediately
+        setRemainingTime(idleTimer.getRemainingTime());
+        setIsIdle(idleTimer.getIsIdle());
+        setState(idleTimer.getCurrentState());
+
         const interval = setInterval(() => {
             setRemainingTime(idleTimer.getRemainingTime());
+            setIsIdle(idleTimer.getIsIdle());
+            setState(idleTimer.getCurrentState());
         }, 1000);
-        setRemainingTime(idleTimer.getRemainingTime());
+
         return () => clearInterval(interval);
     }, [idleTimer]);
 
