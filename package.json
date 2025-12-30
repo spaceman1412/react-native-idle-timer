@@ -1,6 +1,6 @@
 {
     "name": "react-native-idle-timer-detection",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A React Native library for detecting user idle time with automatic pause/resume support for keyboard and app state changes",
     "keywords": [
         "react-native",
