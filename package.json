@@ -1,19 +1,53 @@
 {
     "name": "react-native-idle-timer-detection",
-    "version": "1.0.0",
-    "main": "index.ts",
-    "scripts": {
-        "start": "expo start",
-        "android": "expo start --android",
-        "ios": "expo start --ios",
-        "web": "expo start --web",
-        "test": "jest"
+    "version": "1.0.1",
+    "description": "A React Native library for detecting user idle time with automatic pause/resume support for keyboard and app state changes",
+    "keywords": [
+        "react-native",
+        "idle-timer",
+        "idle-detection",
+        "user-activity",
+        "timeout",
+        "inactivity",
+        "expo"
+    ],
+    "main": "./lib/commonjs/index.js",
+    "module": "./lib/module/index.js",
+    "react-native": "./lib/module/index.js",
+    "types": "./lib/typescript/src/index.d.ts",
+    "source": "./src/index.ts",
+    "exports": {
+        ".": {
+            "import": {
+                "types": "./lib/typescript/src/index.d.ts",
+                "default": "./lib/module/index.js"
+            },
+            "require": {
+                "types": "./lib/typescript/src/index.d.ts",
+                "default": "./lib/commonjs/index.js"
+            }
+        },
+        "./package.json": "./package.json"
     },
-    "dependencies": {
-        "expo": "~54.0.27",
-        "expo-status-bar": "~3.0.9",
-        "react": "19.1.0",
-        "react-native": "0.81.5"
+    "files": [
+        "lib/commonjs",
+        "lib/module",
+        "lib/typescript/src",
+        "README.md"
+    ],
+    "scripts": {
+        "build": "bob build",
+        "prepare": "bob build",
+        "prepublishOnly": "bob build",
+        "test": "jest",
+        "demo:start": "pnpm -C Demo start",
+        "demo:ios": "pnpm -C Demo start --ios",
+        "demo:android": "pnpm -C Demo start --android",
+        "demo:web": "pnpm -C Demo start --web"
+    },
+    "peerDependencies": {
+        "react": ">=18.0.0",
+        "react-native": ">=0.70.0"
     },
     "devDependencies": {
         "@babel/core": "^7.28.5",
@@ -24,10 +58,35 @@
         "@types/react": "~19.1.0",
         "babel-jest": "^30.2.0",
         "jest": "^30.2.0",
+        "react": "19.1.0",
+        "react-native": "0.81.5",
+        "react-native-builder-bob": "^0.30.0",
         "react-test-renderer": "^19.1.0",
         "ts-node": "^10.9.2",
         "typescript": "~5.9.2"
     },
-    "private": true,
+    "react-native-builder-bob": {
+        "source": "src",
+        "output": "lib",
+        "targets": [
+            "commonjs",
+            [
+                "module",
+                {
+                    "esm": true
+                }
+            ],
+            "typescript"
+        ]
+    },
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/spaceman1412/react-native-idle-timer.git"
+    },
+    "homepage": "https://github.com/spaceman1412/react-native-idle-timer#readme",
+    "bugs": {
+        "url": "https://github.com/spaceman1412/react-native-idle-timer/issues"
+    },
     "packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c"
 }

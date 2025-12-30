@@ -10,7 +10,7 @@ https://github.com/user-attachments/assets/ed5449ed-7be2-473d-8550-b821cdf58503
 
 
 
-To see the demo implementation, check out [`src/index.tsx`](src/index.tsx) which contains a complete `DemoScreen` component showcasing all features of the library including:
+To see the demo implementation, check out the [`Demo/`](Demo/) folder which contains a complete Expo app showcasing all features of the library including:
 
 -   Real-time countdown display
 -   Timer state visualization (running/paused/idle)
@@ -19,7 +19,17 @@ To see the demo implementation, check out [`src/index.tsx`](src/index.tsx) which
 -   Idle modal demonstration
 -   Complete API method examples
 
-The demo implementation serves as a reference for how to use the library. You can view the source code to see practical examples of integrating `useIdleTimer` into your React Native components.
+To run the demo app:
+
+```bash
+pnpm demo:start
+# or
+pnpm demo:ios
+pnpm demo:android
+pnpm demo:web
+```
+
+The demo implementation serves as a reference for how to use the library. You can view the source code in [`Demo/src/DemoScreen.tsx`](Demo/src/DemoScreen.tsx) to see practical examples of integrating `useIdleTimer` into your React Native components.
 
 ## Features
 

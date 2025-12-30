@@ -1,5 +1,6 @@
-import { DemoScreen } from "./src";
+import { DemoScreen } from "./src/DemoScreen";
 
 export default function App() {
     return <DemoScreen />;
 }
+

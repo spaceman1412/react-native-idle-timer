@@ -13,7 +13,7 @@ import {
     TouchableWithoutFeedback,
     View,
 } from "react-native";
-import { useIdleTimer } from "./useIdleTimer";
+import { useIdleTimer } from "react-native-idle-timer-detection";
 
 // =============================================================================
 // DEMO SCREEN
@@ -34,7 +34,7 @@ export const DemoScreen = () => {
 
     const [isIdle, setIsIdle] = useState(() => idleTimer.getIsIdle());
     const [state, setState] = useState<"running" | "paused" | "idle">(() =>
-        idleTimer.getCurrentState()
+        idleTimer.getCurrentState() as "running" | "paused" | "idle"
     );
 
     // Update countdown, state, and isIdle every second
@@ -47,7 +47,7 @@ export const DemoScreen = () => {
         const interval = setInterval(() => {
             setRemainingTime(idleTimer.getRemainingTime());
             setIsIdle(idleTimer.getIsIdle());
-            setState(idleTimer.getCurrentState());
+            setState(idleTimer.getCurrentState() as "running" | "paused" | "idle");
         }, 1000);
 
         return () => clearInterval(interval);
@@ -469,3 +469,4 @@ const styles = StyleSheet.create({
         fontWeight: "600",
     },
 });
+

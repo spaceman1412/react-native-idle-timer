@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react-native";
 import { describe, expect, test, beforeEach, afterEach } from "@jest/globals";
-import { useIdleTimer } from "../src/useIdleTimer";
+import { useIdleTimer } from "../src/index";
 import { jest } from "@jest/globals";
 
 describe("useIdleTimer", () => {
